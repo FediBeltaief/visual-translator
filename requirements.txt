@@ -1,0 +1,7 @@
+flask
+easyocr
+torch
+transformers
+sentencepiece
+pillow
+opencv-python
