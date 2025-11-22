@@ -3,6 +3,10 @@ import os
 import uuid
 import easyocr
 from transformers import MarianMTModel, MarianTokenizer
+import cv2
+from PIL import Image
+import numpy as np  
+
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
@@ -42,6 +46,16 @@ def index():
             result = ocr_reader.readtext(filepath)
             extracted_list = [item[1] for item in result]
             extracted = "\n".join(extracted_list)
+            image_cv = cv2.imread(filepath)
+            for (bbox, text, prob) in result:
+                pts = [(int(x), int(y)) for x, y in bbox]
+                cv2.polylines(image_cv, [np.array(pts)], isClosed=True, color=(0, 255, 0), thickness=2)
+
+            boxed_filename = f"{uuid.uuid4()}_boxed.jpg"
+            boxed_filepath = os.path.join(app.config['UPLOAD_FOLDER'], boxed_filename)
+            cv2.imwrite(boxed_filepath, image_cv)
+
+            image_path = boxed_filepath
 
             if extracted.strip():
                 translated = translate_text(extracted)
