@@ -1,30 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visual Translator</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h2>Real-Time Visual Translator</h2>
 
-    <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="image" required>
-        <button type="submit">Translate</button>
-    </form>
+    <div class="container">
+        <h2>Real-Time Visual Translator</h2>
 
-    {% if image_path %}
-        <h3>Uploaded Image:</h3>
-        <img src="{{ image_path }}" width="350">
-    {% endif %}
+        <form method="POST" enctype="multipart/form-data">
+            <div class="file-upload-wrapper">
+                <span class="upload-text">📂 Click to Select Image</span>
+                <input type="file" name="image" required onchange="updateFileName(this)">
+            </div>
+            <button type="submit">Translate Image</button>
+            <label for="target_lang">Translate to:</label>
+<select name="target_lang" id="target_lang">
+    <option value="fr">French</option>
+    <option value="es">Spanish</option>
+    <option value="ar">Arabic</option>
+    <option value="de">German</option>
+    <option value="it">Italian</option>
+</select>
 
-    {% if extracted %}
-        <h3>Detected Text:</h3>
-        <pre>{{ extracted }}</pre>
-    {% endif %}
+        </form>
 
-    {% if translated %}
-        <h3>Translated Text:</h3>
-        <pre>{{ translated }}</pre>
-    {% endif %}
+        {% if image_path %}
+        <div class="results-container">
+            <div class="image-preview">
+                <img src="{{ image_path }}" alt="Uploaded Image">
+            </div>
 
+            {% if extracted or translated %}
+            <div class="text-grid">
+                {% if extracted %}
+                <div class="text-box">
+                    <h3>Detected Text</h3>
+                    <pre>{{ extracted }}</pre>
+                </div>
+                {% endif %}
+
+                {% if translated %}
+                <div class="text-box translated-box">
+                    <h3 class="translated-title">Translated Text</h3>
+                    <pre>{{ translated }}</pre>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function updateFileName(input) {
+            const wrapper = document.querySelector('.upload-text');
+            if (input.files && input.files[0]) {
+                wrapper.textContent = '✅ ' + input.files[0].name;
+                wrapper.style.color = '#10b981';
+            }
+        }
+    </script>
 </body>
 </html>

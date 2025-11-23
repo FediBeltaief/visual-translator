@@ -11,17 +11,30 @@ import numpy as np
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-ocr_reader = easyocr.Reader(['en'])  
+ocr_reader = easyocr.Reader(['en'])
 
-model_name = 'Helsinki-NLP/opus-mt-en-fr'
-tokenizer = MarianTokenizer.from_pretrained(model_name)
-model = MarianMTModel.from_pretrained(model_name)
+translation_models = {
+    "fr": "Helsinki-NLP/opus-mt-en-fr",
+    "es": "Helsinki-NLP/opus-mt-en-es",
+    "ar": "Helsinki-NLP/opus-mt-en-ar",
+    "de": "Helsinki-NLP/opus-mt-en-de",
+    "it": "Helsinki-NLP/opus-mt-en-it"
+}
 
+loaded_models = {}
 
-def translate_text(text):
-    if all(ord(c) < 128 for c in text):
-        pass
+def get_model(lang):
+    if lang not in loaded_models:
+        model_name = translation_models[lang]
+        tokenizer = MarianTokenizer.from_pretrained(model_name)
+        model = MarianMTModel.from_pretrained(model_name)
+        loaded_models[lang] = (tokenizer, model)
+    return loaded_models[lang]
+
+def translate_text(text, lang):
+    tokenizer, model = get_model(lang)
 
     tokens = tokenizer(text, return_tensors="pt", padding=True)
     translation = model.generate(**tokens)
@@ -36,12 +49,12 @@ def index():
 
     if request.method == "POST":
         file = request.files['image']
+        target_lang = request.form.get("target_lang", "fr") 
 
         if file:
             filename = f"{uuid.uuid4()}.jpg"
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
-            image_path = filepath
 
             result = ocr_reader.readtext(filepath)
             extracted_list = [item[1] for item in result]
@@ -58,7 +71,7 @@ def index():
             image_path = boxed_filepath
 
             if extracted.strip():
-                translated = translate_text(extracted)
+                translated = translate_text(extracted, target_lang)
             else:
                 translated = "No text detected."
 
