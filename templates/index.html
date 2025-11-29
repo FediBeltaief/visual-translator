@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visual Translator</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
 </head>
-<body>
 
+
+<body>
     <div class="container">
+        
         <h2>Real-Time Visual Translator</h2>
 
         <form method="POST" enctype="multipart/form-data">
@@ -16,16 +20,19 @@
                 <span class="upload-text">📂 Click to Select Image</span>
                 <input type="file" name="image" required onchange="updateFileName(this)">
             </div>
-            <button type="submit">Translate Image</button>
-            <label for="target_lang">Translate to:</label>
-<select name="target_lang" id="target_lang">
-    <option value="fr">French</option>
-    <option value="es">Spanish</option>
-    <option value="ar">Arabic</option>
-    <option value="de">German</option>
-    <option value="it">Italian</option>
-</select>
 
+            <div style="margin-top: 15px; margin-bottom: 15px;">
+                <label for="target_lang">Translate to:</label>
+                <select name="target_lang" id="target_lang" onchange="triggerReTranslation()">
+                    <option value="fr" {% if current_lang=='fr' %}selected{% endif %}>French</option>
+                    <option value="es" {% if current_lang=='es' %}selected{% endif %}>Spanish</option>
+                    <option value="ar" {% if current_lang=='ar' %}selected{% endif %}>Arabic</option>
+                    <option value="de" {% if current_lang=='de' %}selected{% endif %}>German</option>
+                    <option value="it" {% if current_lang=='it' %}selected{% endif %}>Italian</option>
+                </select>
+            </div>
+
+            <button type="submit">Upload & Analyze</button>
         </form>
 
         {% if image_path %}
@@ -34,23 +41,22 @@
                 <img src="{{ image_path }}" alt="Uploaded Image">
             </div>
 
-            {% if extracted or translated %}
             <div class="text-grid">
-                {% if extracted %}
                 <div class="text-box">
-                    <h3>Detected Text</h3>
-                    <pre>{{ extracted }}</pre>
+                    <h3>Detected Text <small>(Editable)</small></h3>
+                    <div class="text-area-wrapper">
+                        <textarea id="source-text" class="editable-box">{{ extracted }}</textarea>
+                    </div>
+                    <div class="action-bar">
+                        <button class="btn-update" onclick="updateTranslation()">↻ Update Translation</button>
+                    </div>
                 </div>
-                {% endif %}
 
-                {% if translated %}
                 <div class="text-box translated-box">
                     <h3 class="translated-title">Translated Text</h3>
-                    <pre>{{ translated }}</pre>
+                    <pre id="translated-text">{{ translated }}</pre>
                 </div>
-                {% endif %}
             </div>
-            {% endif %}
         </div>
         {% endif %}
     </div>
@@ -61,6 +67,51 @@
             if (input.files && input.files[0]) {
                 wrapper.textContent = '✅ ' + input.files[0].name;
                 wrapper.style.color = '#10b981';
+            }
+        }
+
+        async function updateTranslation() {
+            const sourceText = document.getElementById('source-text').value;
+            const targetLang = document.getElementById('target_lang').value;
+            const outputBox = document.getElementById('translated-text');
+            const updateBtn = document.querySelector('.btn-update');
+
+            outputBox.style.opacity = '0.5';
+            outputBox.textContent = "Translating...";
+            updateBtn.disabled = true;
+            updateBtn.textContent = "Processing...";
+
+            try {
+                const response = await fetch('/api/translate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        text: sourceText,
+                        target_lang: targetLang
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    outputBox.textContent = data.translated;
+                } else {
+                    outputBox.textContent = "Error during translation.";
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                outputBox.textContent = "Network error.";
+            } finally {
+                outputBox.style.opacity = '1';
+                updateBtn.disabled = false;
+                updateBtn.textContent = "↻ Update Translation";
+            }
+        }
+
+        function triggerReTranslation() {
+            if (document.getElementById('source-text')) {
+                updateTranslation();
             }
         }
     </script>
