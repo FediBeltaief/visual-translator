@@ -7,8 +7,6 @@ import cv2
 import numpy as np
 import torch
 
-torch.set_num_threads(4)
-
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -27,18 +25,9 @@ loaded_models = {}
 
 def get_model(lang):
     if lang not in loaded_models:
-        print(f"Loading model for {lang}...")
         model_name = translation_models[lang]
         tokenizer = MarianTokenizer.from_pretrained(model_name)
         model = MarianMTModel.from_pretrained(model_name)
-        
-        try:
-            model = torch.quantization.quantize_dynamic(
-                model, {torch.nn.Linear}, dtype=torch.qint8
-            )
-        except Exception as e:
-            print(f"Quantization failed (ignoring): {e}")
-
         loaded_models[lang] = (tokenizer, model)
     return loaded_models[lang]
 
@@ -56,8 +45,7 @@ def translate_text(text, lang):
                 continue
             
             tokens = tokenizer(line, return_tensors="pt", padding=True, truncation=True, max_length=512)
-            with torch.no_grad():
-                translation = model.generate(**tokens)
+            translation = model.generate(**tokens)
             decoded = tokenizer.decode(translation[0], skip_special_tokens=True)
             translated_lines.append(decoded)
             
@@ -69,15 +57,20 @@ def translate_text(text, lang):
 def process_image_and_extract(image_path):
     img = cv2.imread(image_path)
     if img is None:
-        return None, []
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        return None, [], None
+
+    scale = 2.0
+    height, width = img.shape[:2]
+    img_resized = cv2.resize(img, (int(width * scale), int(height * scale)), interpolation=cv2.INTER_LINEAR)
+    
+    gray = cv2.cvtColor(img_resized, cv2.COLOR_BGR2GRAY)
     results = ocr_reader.readtext(gray, paragraph=True)
 
     if not results:
         gray_inverted = cv2.bitwise_not(gray)
         results = ocr_reader.readtext(gray_inverted, paragraph=True)
 
-    return img, results
+    return img_resized, results
 
 @app.route("/", methods=["GET", "POST"])
 def index():
