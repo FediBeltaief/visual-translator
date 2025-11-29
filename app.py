@@ -36,7 +36,6 @@ def translate_text(text, lang):
         return ""
     try:
         tokenizer, model = get_model(lang)
-        # Split by newlines to preserve paragraph structure
         lines = text.split('\n')
         translated_lines = []
         
@@ -45,7 +44,6 @@ def translate_text(text, lang):
                 translated_lines.append("")
                 continue
             
-            # Translate line by line
             tokens = tokenizer(line, return_tensors="pt", padding=True, truncation=True, max_length=512)
             translation = model.generate(**tokens)
             decoded = tokenizer.decode(translation[0], skip_special_tokens=True)
@@ -79,7 +77,7 @@ def index():
     translated = None
     extracted = None
     image_path = None
-    target_lang = "fr" # default
+    target_lang = "fr" 
 
     if request.method == "POST":
         file = request.files.get('image')
@@ -116,7 +114,6 @@ def index():
                            image_path=image_path,
                            current_lang=target_lang)
 
-# --- NEW API ROUTE FOR LIVE UPDATES ---
 @app.route("/api/translate", methods=["POST"])
 def api_translate():
     data = request.json
