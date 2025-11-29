@@ -6,33 +6,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visual Translator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 
-
 <body>
+    <select id="lang-selector" class="lang-selector" onchange="changeLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+        <option value="es">Español</option>
+        <option value="de">Deutsch</option>
+        <option value="it">Italiano</option>
+        <option value="ar">العربية</option>
+    </select>
+
+    <button id="theme-toggle" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Dark Mode">
+        <span class="icon sun">☀️</span>
+        <span class="icon moon">🌙</span>
+    </button>
+
     <div class="container">
         
-        <h2>Real-Time Visual Translator</h2>
+        <h2 data-i18n="title">Real-Time Visual Translator</h2>
 
         <form method="POST" enctype="multipart/form-data">
             <div class="file-upload-wrapper">
-                <span class="upload-text">📂 Click to Select Image</span>
-                <input type="file" name="image" required onchange="updateFileName(this)">
+                <span class="upload-text" data-i18n="upload_text">📂 Click to Select Image</span>
+                <input type="file" name="image" id="file-input" required onchange="updateFileName(this)">
             </div>
 
             <div style="margin-top: 15px; margin-bottom: 15px;">
-                <label for="target_lang">Translate to:</label>
+                <label for="target_lang" data-i18n="label_target">Translate to:</label>
                 <select name="target_lang" id="target_lang" onchange="triggerReTranslation()">
-                    <option value="fr" {% if current_lang=='fr' %}selected{% endif %}>French</option>
-                    <option value="es" {% if current_lang=='es' %}selected{% endif %}>Spanish</option>
-                    <option value="ar" {% if current_lang=='ar' %}selected{% endif %}>Arabic</option>
-                    <option value="de" {% if current_lang=='de' %}selected{% endif %}>German</option>
-                    <option value="it" {% if current_lang=='it' %}selected{% endif %}>Italian</option>
+                    <option value="fr" data-i18n="opt_fr" {% if current_lang=='fr' %}selected{% endif %}>French</option>
+                    <option value="es" data-i18n="opt_es" {% if current_lang=='es' %}selected{% endif %}>Spanish</option>
+                    <option value="ar" data-i18n="opt_ar" {% if current_lang=='ar' %}selected{% endif %}>Arabic</option>
+                    <option value="de" data-i18n="opt_de" {% if current_lang=='de' %}selected{% endif %}>German</option>
+                    <option value="it" data-i18n="opt_it" {% if current_lang=='it' %}selected{% endif %}>Italian</option>
                 </select>
             </div>
 
-            <button type="submit">Upload & Analyze</button>
+            <button type="submit" data-i18n="btn_submit">Upload & Analyze</button>
         </form>
 
         {% if image_path %}
@@ -43,17 +56,17 @@
 
             <div class="text-grid">
                 <div class="text-box">
-                    <h3>Detected Text <small>(Editable)</small></h3>
+                    <h3><span data-i18n="header_detected">Detected Text</span> <small data-i18n="label_editable">(Editable)</small></h3>
                     <div class="text-area-wrapper">
                         <textarea id="source-text" class="editable-box">{{ extracted }}</textarea>
                     </div>
                     <div class="action-bar">
-                        <button class="btn-update" onclick="updateTranslation()">↻ Update Translation</button>
+                        <button class="btn-update" onclick="updateTranslation()" data-i18n="btn_update">↻ Update Translation</button>
                     </div>
                 </div>
 
                 <div class="text-box translated-box">
-                    <h3 class="translated-title">Translated Text</h3>
+                    <h3 class="translated-title" data-i18n="header_translated">Translated Text</h3>
                     <pre id="translated-text">{{ translated }}</pre>
                 </div>
             </div>
@@ -62,6 +75,174 @@
     </div>
 
     <script>
+        const translations = {
+            en: {
+                title: "Real-Time Visual Translator",
+                upload_text: "📂 Click to Select Image",
+                label_target: "Translate to:",
+                btn_submit: "Upload & Analyze",
+                header_detected: "Detected Text",
+                label_editable: "(Editable)",
+                header_translated: "Translated Text",
+                btn_update: "↻ Update Translation",
+                opt_fr: "French",
+                opt_es: "Spanish",
+                opt_ar: "Arabic",
+                opt_de: "German",
+                opt_it: "Italian",
+                results_label: "Results ↓",
+                processing: "Processing...",
+                translating: "Translating...",
+                error: "Error during translation.",
+                network_error: "Network error."
+            },
+            fr: {
+                title: "Traducteur Visuel Temps Réel",
+                upload_text: "📂 Cliquez pour sélectionner une image",
+                label_target: "Traduire vers :",
+                btn_submit: "Télécharger et Analyser",
+                header_detected: "Texte Détecté",
+                label_editable: "(Modifiable)",
+                header_translated: "Texte Traduit",
+                btn_update: "↻ Mettre à jour",
+                opt_fr: "Français",
+                opt_es: "Espagnol",
+                opt_ar: "Arabe",
+                opt_de: "Allemand",
+                opt_it: "Italien",
+                results_label: "Résultats ↓",
+                processing: "Traitement...",
+                translating: "Traduction...",
+                error: "Erreur de traduction.",
+                network_error: "Erreur réseau."
+            },
+            es: {
+                title: "Traductor Visual en Tiempo Real",
+                upload_text: "📂 Clic para seleccionar imagen",
+                label_target: "Traducir a:",
+                btn_submit: "Subir y Analizar",
+                header_detected: "Texto Detectado",
+                label_editable: "(Editable)",
+                header_translated: "Texto Traducido",
+                btn_update: "↻ Actualizar",
+                opt_fr: "Francés",
+                opt_es: "Español",
+                opt_ar: "Árabe",
+                opt_de: "Alemán",
+                opt_it: "Italiano",
+                results_label: "Resultados ↓",
+                processing: "Procesando...",
+                translating: "Traduciendo...",
+                error: "Error en la traducción.",
+                network_error: "Error de red."
+            },
+            de: {
+                title: "Echtzeit Visueller Übersetzer",
+                upload_text: "📂 Klicken um Bild zu wählen",
+                label_target: "Übersetzen nach:",
+                btn_submit: "Hochladen & Analysieren",
+                header_detected: "Erkannter Text",
+                label_editable: "(Bearbeitbar)",
+                header_translated: "Übersetzter Text",
+                btn_update: "↻ Aktualisieren",
+                opt_fr: "Französisch",
+                opt_es: "Spanisch",
+                opt_ar: "Arabisch",
+                opt_de: "Deutsch",
+                opt_it: "Italienisch",
+                results_label: "Ergebnisse ↓",
+                processing: "Verarbeitung...",
+                translating: "Übersetzen...",
+                error: "Fehler bei der Übersetzung.",
+                network_error: "Netzwerkfehler."
+            },
+            it: {
+                title: "Traduttore Visivo in Tempo Reale",
+                upload_text: "📂 Clicca per selezionare immagine",
+                label_target: "Traduci in:",
+                btn_submit: "Carica e Analizza",
+                header_detected: "Testo Rilevato",
+                label_editable: "(Modificabile)",
+                header_translated: "Testo Tradotto",
+                btn_update: "↻ Aggiorna",
+                opt_fr: "Francese",
+                opt_es: "Spagnolo",
+                opt_ar: "Arabo",
+                opt_de: "Tedesco",
+                opt_it: "Italiano",
+                results_label: "Risultati ↓",
+                processing: "Elaborazione...",
+                translating: "Traduzione...",
+                error: "Errore durante la traduzione.",
+                network_error: "Errore di rete."
+            },
+            ar: {
+                title: "مترجم مرئي في الوقت الحقيقي",
+                upload_text: "📂 انقر لاختيار صورة",
+                label_target: "ترجم إلى:",
+                btn_submit: "رفع وتحليل",
+                header_detected: "النص المكتشف",
+                label_editable: "(قابل للتعديل)",
+                header_translated: "النص المترجم",
+                btn_update: "↻ تحديث الترجمة",
+                opt_fr: "الفرنسية",
+                opt_es: "الإسبانية",
+                opt_ar: "العربية",
+                opt_de: "الألمانية",
+                opt_it: "الإيطالية",
+                results_label: "النتائج ↓",
+                processing: "جاري المعالجة...",
+                translating: "جاري الترجمة...",
+                error: "حدث خطأ أثناء الترجمة.",
+                network_error: "خطأ في الشبكة."
+            }
+        };
+
+        function changeLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            localStorage.setItem('site_lang', lang);
+
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    if (key === 'upload_text') {
+                        const fileInput = document.getElementById('file-input');
+                        if (fileInput.files.length === 0) {
+                            el.textContent = translations[lang][key];
+                        }
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+
+            const resultsContainer = document.querySelector('.results-container');
+            if (resultsContainer) {
+                resultsContainer.setAttribute('data-results-label', translations[lang]['results_label']);
+            }
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+            const isDark = body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateThemeIcon(isDark);
+        }
+
+        function updateThemeIcon(isDark) {
+            const btn = document.getElementById('theme-toggle');
+            if(isDark) {
+                btn.querySelector('.sun').style.display = 'none';
+                btn.querySelector('.moon').style.display = 'inline';
+            } else {
+                btn.querySelector('.sun').style.display = 'inline';
+                btn.querySelector('.moon').style.display = 'none';
+            }
+        }
+
         function updateFileName(input) {
             const wrapper = document.querySelector('.upload-text');
             if (input.files && input.files[0]) {
@@ -71,41 +252,38 @@
         }
 
         async function updateTranslation() {
+            const currentLang = document.documentElement.lang || 'en';
+            const t = translations[currentLang];
             const sourceText = document.getElementById('source-text').value;
             const targetLang = document.getElementById('target_lang').value;
             const outputBox = document.getElementById('translated-text');
             const updateBtn = document.querySelector('.btn-update');
 
             outputBox.style.opacity = '0.5';
-            outputBox.textContent = "Translating...";
+            outputBox.textContent = t.translating;
             updateBtn.disabled = true;
-            updateBtn.textContent = "Processing...";
+            updateBtn.textContent = t.processing;
 
             try {
                 const response = await fetch('/api/translate', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        text: sourceText,
-                        target_lang: targetLang
-                    })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: sourceText, target_lang: targetLang })
                 });
 
                 if (response.ok) {
                     const data = await response.json();
                     outputBox.textContent = data.translated;
                 } else {
-                    outputBox.textContent = "Error during translation.";
+                    outputBox.textContent = t.error;
                 }
             } catch (error) {
                 console.error('Error:', error);
-                outputBox.textContent = "Network error.";
+                outputBox.textContent = t.network_error;
             } finally {
                 outputBox.style.opacity = '1';
                 updateBtn.disabled = false;
-                updateBtn.textContent = "↻ Update Translation";
+                updateBtn.textContent = t.btn_update;
             }
         }
 
@@ -114,6 +292,22 @@
                 updateTranslation();
             }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.body.classList.add('dark-mode');
+                updateThemeIcon(true);
+            } else {
+                updateThemeIcon(false);
+            }
+
+            const savedLang = localStorage.getItem('site_lang') || 'en';
+            const langSelector = document.getElementById('lang-selector');
+            if(langSelector) langSelector.value = savedLang;
+            changeLanguage(savedLang);
+        });
     </script>
 </body>
 </html>
