@@ -1,8 +1,8 @@
-## Version 2.0: Big Improvements! 🎉
+## Version 2.0: Big Improvements!
 
 We've given the whole application a fresh coat of paint and boosted its performance to make it better than ever! Here's a rundown of what's new in this awesome update:
 
-1. **Sleek & Easy-to-Use Interface**
+1. **Easy-to-Use Interface**
 
 We've waved goodbye to the old-school look! The interface has been completely revamped with a modern CSS framework, bringing you:
 
@@ -14,7 +14,7 @@ We've waved goodbye to the old-school look! The interface has been completely re
 
 ![alt text](https://i.imgur.com/mCYJBo4.png)
 
-2. **Translate into Many Languages! 🌍**
+2. **Translate into Many Languages**
 
 You're no longer stuck with just French! We've added a smart language selector that lets you pick your desired language before translating.
 
@@ -26,7 +26,7 @@ Currently, we support these languages:
    *   🇩🇪 German
    *   🇮🇹 Italian
 
-3. **See Translations Side-by-Side! 👁️**
+3. **See Translations Side-by-Side**
 
 Checking your translations is now super easy. Instead of text jumbled on top of each other, Version 2 uses a clear grid layout:
 
@@ -38,7 +38,7 @@ Checking your translations is now super easy. Instead of text jumbled on top of 
 
 ![alt text](https://i.imgur.com/JCGA0dZ.png)
 
-4. **Smarter File Handling 🗂️**
+4. **Smarter File Handling**
 
    *   **Unique File Names:** We use a special code (UUID) to give each uploaded file a unique name. This means you can upload lots of files without worrying about accidentally replacing older ones or having weird errors.
 
