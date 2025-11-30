@@ -17,7 +17,9 @@ We've totally redesigned the user interface (that's the part you see and interac
 
 ![alt text](https://i.imgur.com/Fanb4oS.png)
 
-
+<p align="center">
+<img src="https://i.imgur.com/eW2832c.png" alt="Mobile Interface" width="350">
+</p>
 
 2.  **Smarter Text Reading (OCR) & Handwriting Recognition**
 
