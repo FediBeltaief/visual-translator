@@ -6,8 +6,23 @@ from transformers import MarianMTModel, MarianTokenizer
 import cv2
 import numpy as np
 import torch
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+
+
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
@@ -53,6 +68,18 @@ def translate_text(text, lang):
     except Exception as e:
         print(f"Translation error: {e}")
         return "Translation failed."
+
+class OCRSession(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    image_path = db.Column(db.String(255))
+    extracted_text = db.Column(db.Text)
+    translated_text = db.Column(db.Text)
+    target_lang = db.Column(db.String(5))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'<OCRSession {self.id}>'
+
 
 def process_image_and_extract(image_path):
     img = cv2.imread(image_path)
@@ -114,6 +141,7 @@ def index():
                            image_path=image_path,
                            current_lang=target_lang)
 
+
 @app.route("/api/translate", methods=["POST"])
 def api_translate():
     data = request.json
@@ -125,4 +153,7 @@ def api_translate():
     return jsonify({"translated": translated_text})
 
 if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
+
     app.run(debug=True)

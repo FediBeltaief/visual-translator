@@ -1,0 +1,110 @@
+[
+    {
+        "image": "test_images\\sample1.jpg",
+        "target_lang": "fr",
+        "batch_size": 1,
+        "processing_time": 16.04,
+        "extracted_text": "Dear Santa I have been very Jood this year And have been thinking of what I woUld like for Christmas. ( leg? 2 . bicycle 2. Puppy I Am very excited for Your visit And will leave out Some Snacks for You and your reindeer_ love.",
+        "translated_text": "Cher Père Noël, j'ai été très Jood cette année et j'ai pensé à ce que j'aime pour Noël. ( jambe? 2 . vélo 2. Puppy Je suis très excité pour votre visite Et je vais laisser quelques collations pour vous et votre amour de renne.",
+        "text_ratio": 1.0
+    },
+    {
+        "image": "test_images\\sample2.png",
+        "target_lang": "fr",
+        "batch_size": 1,
+        "processing_time": 3.41,
+        "extracted_text": "It was the best of times, it was the worst of times, it was the age of wisdom; 9 it was the age of foolishness_.",
+        "translated_text": "C'était le meilleur des temps, c'était le pire des temps, c'était l'âge de la sagesse; 9 c'était l'âge de la folie.",
+        "text_ratio": 0.9739
+    },
+    {
+        "image": "test_images\\sample1.jpg",
+        "target_lang": "fr",
+        "batch_size": 2,
+        "processing_time": 13.53,
+        "extracted_text": "Dear Santa I have been very Jood this year And have been thinking of what I woUld like for Christmas. ( leg? 2 . bicycle 2. Puppy I Am very excited for Your visit And will leave out Some Snacks for You and your reindeer_ love.",
+        "translated_text": "Cher Père Noël, j'ai été très Jood cette année et j'ai pensé à ce que j'aime pour Noël. ( jambe? 2 . vélo 2. Puppy Je suis très excité pour votre visite Et je vais laisser quelques collations pour vous et votre amour de renne.",
+        "text_ratio": 1.0
+    },
+    {
+        "image": "test_images\\sample2.png",
+        "target_lang": "fr",
+        "batch_size": 2,
+        "processing_time": 3.4,
+        "extracted_text": "It was the best of times, it was the worst of times, it was the age of wisdom; 9 it was the age of foolishness_.",
+        "translated_text": "C'était le meilleur des temps, c'était le pire des temps, c'était l'âge de la sagesse; 9 c'était l'âge de la folie.",
+        "text_ratio": 0.9739
+    },
+    {
+        "image": "test_images\\sample1.jpg",
+        "target_lang": "es",
+        "batch_size": 1,
+        "processing_time": 15.09,
+        "extracted_text": "Dear Santa I have been very Jood this year And have been thinking of what I woUld like for Christmas. ( leg? 2 . bicycle 2. Puppy I Am very excited for Your visit And will leave out Some Snacks for You and your reindeer_ love.",
+        "translated_text": "Querida Santa He estado muy alegre este año y he estado pensando en lo que me gustaría para la Navidad. (pierna? 2 . bicicleta 2. Cachorrito Estoy muy emocionado por su visita y voy a dejar fuera algunos bocadillos para usted y su reno_ amor.",
+        "text_ratio": 0.9339
+    },
+    {
+        "image": "test_images\\sample2.png",
+        "target_lang": "es",
+        "batch_size": 1,
+        "processing_time": 3.26,
+        "extracted_text": "It was the best of times, it was the worst of times, it was the age of wisdom; 9 it was the age of foolishness_.",
+        "translated_text": "Era el mejor de los tiempos, era el peor de los tiempos, era la edad de la sabiduría; 9 era la edad de la necedad_.",
+        "text_ratio": 0.9739
+    },
+    {
+        "image": "test_images\\sample1.jpg",
+        "target_lang": "es",
+        "batch_size": 2,
+        "processing_time": 12.79,
+        "extracted_text": "Dear Santa I have been very Jood this year And have been thinking of what I woUld like for Christmas. ( leg? 2 . bicycle 2. Puppy I Am very excited for Your visit And will leave out Some Snacks for You and your reindeer_ love.",
+        "translated_text": "Querida Santa He estado muy alegre este año y he estado pensando en lo que me gustaría para la Navidad. (pierna? 2 . bicicleta 2. Cachorrito Estoy muy emocionado por su visita y voy a dejar fuera algunos bocadillos para usted y su reno_ amor.",
+        "text_ratio": 0.9339
+    },
+    {
+        "image": "test_images\\sample2.png",
+        "target_lang": "es",
+        "batch_size": 2,
+        "processing_time": 3.38,
+        "extracted_text": "It was the best of times, it was the worst of times, it was the age of wisdom; 9 it was the age of foolishness_.",
+        "translated_text": "Era el mejor de los tiempos, era el peor de los tiempos, era la edad de la sabiduría; 9 era la edad de la necedad_.",
+        "text_ratio": 0.9739
+    },
+    {
+        "image": "test_images\\sample1.jpg",
+        "target_lang": "de",
+        "batch_size": 1,
+        "processing_time": 15.66,
+        "extracted_text": "Dear Santa I have been very Jood this year And have been thinking of what I woUld like for Christmas. ( leg? 2 . bicycle 2. Puppy I Am very excited for Your visit And will leave out Some Snacks for You and your reindeer_ love.",
+        "translated_text": "Lieber Weihnachtsmann Ich war sehr Jood in diesem Jahr Und habe darüber nachgedacht, was ich für Weihnachten mag. ( Bein? 2 . Fahrrad 2. Welpen Ich bin sehr aufgeregt für Ihren Besuch und wird einige Snacks für Sie und Ihre Rentiere_Liebe auslassen.",
+        "text_ratio": 0.9076
+    },
+    {
+        "image": "test_images\\sample2.png",
+        "target_lang": "de",
+        "batch_size": 1,
+        "processing_time": 3.4,
+        "extracted_text": "It was the best of times, it was the worst of times, it was the age of wisdom; 9 it was the age of foolishness_.",
+        "translated_text": "Es war das Beste der Zeiten, es war das Schlimmste der Zeiten, es war das Alter der Weisheit; 9 es war das Alter der Torheit_.",
+        "text_ratio": 0.8889
+    },
+    {
+        "image": "test_images\\sample1.jpg",
+        "target_lang": "de",
+        "batch_size": 2,
+        "processing_time": 13.05,
+        "extracted_text": "Dear Santa I have been very Jood this year And have been thinking of what I woUld like for Christmas. ( leg? 2 . bicycle 2. Puppy I Am very excited for Your visit And will leave out Some Snacks for You and your reindeer_ love.",
+        "translated_text": "Lieber Weihnachtsmann Ich war sehr Jood in diesem Jahr Und habe darüber nachgedacht, was ich für Weihnachten mag. ( Bein? 2 . Fahrrad 2. Welpen Ich bin sehr aufgeregt für Ihren Besuch und wird einige Snacks für Sie und Ihre Rentiere_Liebe auslassen.",
+        "text_ratio": 0.9076
+    },
+    {
+        "image": "test_images\\sample2.png",
+        "target_lang": "de",
+        "batch_size": 2,
+        "processing_time": 3.77,
+        "extracted_text": "It was the best of times, it was the worst of times, it was the age of wisdom; 9 it was the age of foolishness_.",
+        "translated_text": "Es war das Beste der Zeiten, es war das Schlimmste der Zeiten, es war das Alter der Weisheit; 9 es war das Alter der Torheit_.",
+        "text_ratio": 0.8889
+    }
+]
