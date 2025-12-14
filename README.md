@@ -1,3 +1,11 @@
-# OCR + Translation Web App (English → Another language)
+<div align="center">
 
-This app extracts text from images using EasyOCR and translates it using the MarianMT Transformer model. Built with Flask and deployed on Colab.
+# Check branches for description
+
+### [colab-stable (Version 1)](https://github.com/FediBeltaief/visual-translator/tree/colab-stable)
+
+### [colab-stable-v2 (Version 2)](https://github.com/FediBeltaief/visual-translator/tree/colab-stable-v2)
+
+### [colab-stable-v3 (Version 3)](https://github.com/FediBeltaief/visual-translator/tree/colab-stable-v3)
+
+</div>
